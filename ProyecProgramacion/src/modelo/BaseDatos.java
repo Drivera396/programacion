@@ -1,34 +1,49 @@
 package modelo;
 
+import java.io*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseDatos {
+public class ArchivoDatos {
 
-    private List<Double> registrosECG;
+ private List<Double> registros;
 
-    public BaseDatos() {
-        registrosECG = new ArrayList<>();
-        cargarDatosEjemplo();
+    public ArchivoDatos(String rutaArchivo) throws Exception {
+        registros = new ArrayList<>();
+        cargarArchivo(rutaArchivo);
     }
 
-    private void cargarDatosEjemplo() {
-        registrosECG.add(0.12);
-        registrosECG.add(0.45);
-        registrosECG.add(0.90);
-        registrosECG.add(0.60);
-        registrosECG.add(0.20);
-        registrosECG.add(0.05);
-    }
+    private void cargarArchivo(String ruta) throws Exception {
+        File archivo = new File(ruta);
 
-    public double obtenerDato(int index) {
-        if (index < registrosECG.size()) {
-            return registrosECG.get(index);
+        if (!archivo.exists()) {
+            throw new FileNotFoundException("El archivo de datos no existe: " + ruta);
         }
-        return 0.0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                try {
+                    registros.add(Double.parseDouble(linea));
+                } catch (NumberFormatException e) {
+                    System.out.println("Valor inválido ignorado: " + linea);
+                }
+            }
+        }
     }
 
+    @Override
+    public double obtenerDato(int index) throws Exception {
+        if (index < 0 || index >= registros.size()) {
+            throw new IndexOutOfBoundsException("Índice fuera de rango");
+        }
+
+        return registros.get(index);
+    }
+
+    @Override
     public int cantidadDatos() {
-        return registrosECG.size();
+        return registros.size();
     }
 }
+

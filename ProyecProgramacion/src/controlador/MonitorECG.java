@@ -12,17 +12,22 @@ public class MonitorECG {
         this.sensor = sensor;
         this.pantalla = pantalla;
     }
-
-    public void iniciar(int muestras) {
-        for (int i = 0; i < muestras; i++) {
-            double lectura = sensor.leerSenal();
-            pantalla.mostrarDato(lectura);
-
-            try {
-                Thread.sleep(500); 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    public void iniciar() {
+        new Thread(() -> {
+            while (true) {
+                try {
+                    double lectura = sensor.leerSenal();
+                    ventana.actualizarLectura(lectura);
+                    Thread.sleep(500);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null,
+                            "Error en la lectura: " + e.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
+                  ).start();
     }
 }
+

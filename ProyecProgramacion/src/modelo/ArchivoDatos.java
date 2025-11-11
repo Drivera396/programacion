@@ -1,49 +1,57 @@
 package modelo;
 
-import java.io*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.FileReader;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class ArchivoDatos {
+     private ArrayList<Double> tiempo;
+     private ArrayList<Double> normal;
+     private ArrayList<Double> taquicardia;
+     private ArrayList<Double> bradicardia;
 
- private List<Double> registros;
-
-    public ArchivoDatos(String rutaArchivo) throws Exception {
-        registros = new ArrayList<>();
-        cargarArchivo(rutaArchivo);
-    }
-
-    private void cargarArchivo(String ruta) throws Exception {
-        File archivo = new File(ruta);
-
-        if (!archivo.exists()) {
-            throw new FileNotFoundException("El archivo de datos no existe: " + ruta);
+    public ArchivoDatos(String rutaOUrl, boolean esUrl) throws Exception {
+        tiempo = new ArrayList<>();
+        normal = new ArrayList<>();
+        taquicardia = new ArrayList<>();
+        bradicardia = new ArrayList<>();
+    
+      BufferedReader br;
+     
+      if (esUrl) {
+            URL url = new URL(rutaOUrl);
+            br = new BufferedReader(new InputStreamReader(url.openStream()));
+        } else {
+            File archivo = new File(rutaOUrl);
+            br = new BufferedReader(new FileReader(archivo));
         }
 
-        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
-            String linea;
+        String linea = br.readLine();
+     
             while ((linea = br.readLine()) != null) {
-                try {
-                    registros.add(Double.parseDouble(linea));
-                } catch (NumberFormatException e) {
-                    System.out.println("Valor inválido ignorado: " + linea);
-                }
-            }
+          String[] p = linea.split(",");
+
+            tiempo.add(Double.parseDouble(p[0].trim()));
+            normal.add(Double.parseDouble(p[1].trim()));
+            taquicardia.add(Double.parseDouble(p[2].trim()));
+            bradicardia.add(Double.parseDouble(p[3].trim()));
         }
+        br.close();
+     }
+    public ArrayList<Double> getTiempo() {
+        return tiempo;
     }
 
-    @Override
-    public double obtenerDato(int index) throws Exception {
-        if (index < 0 || index >= registros.size()) {
-            throw new IndexOutOfBoundsException("Índice fuera de rango");
+    public ArrayList<Double> getColumna(String tipo) {
+        switch (tipo) {
+            case "Normal": return normal;
+            case "Taquicardia": return taquicardia;
+            case "Bradicardia": return bradicardia;
         }
-
-        return registros.get(index);
-    }
-
-    @Override
-    public int cantidadDatos() {
-        return registros.size();
+        return null;
     }
 }
-

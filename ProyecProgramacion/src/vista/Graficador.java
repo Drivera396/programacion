@@ -4,7 +4,7 @@ import javax.swing*;
 import java.awt*;
 import java.util.ArrayList;
 
-public class Pantalla {
+public class Graficador {
     public static void mostrarGrafica(
             ArrayList<Double> tiempo,
             ArrayList<Double> valores,
@@ -54,3 +54,4 @@ public class Pantalla {
         ventana.setVisible(true);
     }
 }
+

@@ -1,0 +1,6 @@
+2025-11-14T01:01:00.742694200 - Inicio de registro.
+2025-11-14T01:01:00.750696400 - Mapa inicial generado.
+2025-11-14T01:01:00.759693900 - Paso 1: (7,7)
+2025-11-14T01:01:00.760693500 - Tesoro encontrado en: (7,7)
+2025-11-14T01:01:00.761695100 - Pasos totales: 1
+Fin del registro.

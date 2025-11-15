@@ -19,7 +19,6 @@ public class Graficador {
         ventana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         ventana.add(new JPanel() {
-
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
@@ -29,8 +28,8 @@ public class Graficador {
                 int w = getWidth();
                 int h = getHeight();
 
-                g2.drawLine(50, h - 50, w - 30, h - 50); 
-                g2.drawLine(50, 30, 50, h - 50);   
+                g2.drawLine(50, h - 50, w - 30, h - 50);
+                g2.drawLine(50, 30, 50, h - 50);
 
                 double maxVal = valores.stream().mapToDouble(v -> v).max().orElse(1);
                 double minVal = valores.stream().mapToDouble(v -> v).min().orElse(0);
@@ -56,3 +55,4 @@ public class Graficador {
         ventana.setVisible(true);
     }
 }
+

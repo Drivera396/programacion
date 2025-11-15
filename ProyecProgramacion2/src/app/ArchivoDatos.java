@@ -7,65 +7,57 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class ArchivoDatos {
 
-    private ArrayList<Double> tiempo;
-    private ArrayList<Double> normal;
-    private ArrayList<Double> taquicardia;
-    private ArrayList<Double> bradicardia;
+    private ArrayList<Double> tiempo = new ArrayList<>();
+    private ArrayList<Double> normal = new ArrayList<>();
+    private ArrayList<Double> taquicardia = new ArrayList<>();
+    private ArrayList<Double> bradicardia = new ArrayList<>();
 
-    public ArchivoDatos(String rutaOUrl, boolean esUrl) throws Exception {
-
-        tiempo = new ArrayList<>();
-        normal = new ArrayList<>();
-        taquicardia = new ArrayList<>();
-        bradicardia = new ArrayList<>();
+    public ArchivoDatos(String rutaOUrl, boolean esUrl) {
 
         try {
-
             BufferedReader br;
 
             if (esUrl) {
                 URL url = new URL(rutaOUrl);
                 br = new BufferedReader(new InputStreamReader(url.openStream()));
             } else {
-                File archivo = new File(rutaOUrl);
-                br = new BufferedReader(new FileReader(archivo));
+                br = new BufferedReader(new FileReader(new File(rutaOUrl)));
             }
 
-            br.readLine(); // Saltar encabezado
+            String linea = br.readLine(); // Saltar encabezado
 
-            String line;
+            while ((linea = br.readLine()) != null) {
 
-            while ((line = br.readLine()) != null) {
-
-                if (line.trim().isEmpty()) continue;
-
-                // CSV DE 3 COLUMNAS: tiempo; valor; tipo
-                String[] datos = line.split(";");
-
-                if (datos.length < 3) {
-                    System.err.println("Línea inválida: - ArchivoDatos.java:48" + line);
+                if (linea.trim().isEmpty())
                     continue;
-                }
 
+                // IMPORTANTE: tu archivo usa PUNTO Y COMA como separador ";"
+                String[] datos = linea.split(";");
+
+                // Conversión segura
                 double t = Double.parseDouble(datos[0].trim());
-                double val = Double.parseDouble(datos[1].trim());
-                String tipo = datos[2].trim();
+                double valNormal = Double.parseDouble(datos[1].trim());
+                double valTaquicardia = Double.parseDouble(datos[2].trim());
+                double valBradicardia = Double.parseDouble(datos[3].trim());
 
+                // Guardar valores
                 tiempo.add(t);
-
-                switch (tipo) {
-                    case "Normal" -> normal.add(val);
-                    case "Taquicardia" -> taquicardia.add(val);
-                    case "Bradicardia" -> bradicardia.add(val);
-                }
+                normal.add(valNormal);
+                taquicardia.add(valTaquicardia);
+                bradicardia.add(valBradicardia);
             }
 
             br.close();
 
         } catch (Exception e) {
-            throw new Exception("Error cargando datos: " + e.getMessage());
+            JOptionPane.showMessageDialog(
+                null,
+                "Error cargando datos:\n" + e.getMessage()
+            );
         }
     }
 
@@ -73,6 +65,19 @@ public class ArchivoDatos {
         return tiempo;
     }
 
+    public ArrayList<Double> getNormal() {
+        return normal;
+    }
+
+    public ArrayList<Double> getTaquicardia() {
+        return taquicardia;
+    }
+
+    public ArrayList<Double> getBradicardia() {
+        return bradicardia;
+    }
+
+    // Obtener columna según tipo
     public ArrayList<Double> getColumna(String tipo) {
         return switch (tipo) {
             case "Normal" -> normal;

@@ -9,7 +9,7 @@ import java.net.URL;
 public class Main {
 
     private static final String URL_DRIVE =
-    "https://drive.google.com/uc?export=download&id=1W2I6XviLH90jphh6gyN9uEHpHN60nRP7";
+    "https://drive.google.com/uc?export=download&id=1hD7W6JaNF6fR8PGBIm3MJJuRCIkVfiyD";
 
     private static final String IMG_URL =
             "https://pbs.twimg.com/media/DXeasP3W4AEDJrs.jpg";
@@ -86,6 +86,7 @@ public class Main {
         }
     }
 }
+
 
 
 

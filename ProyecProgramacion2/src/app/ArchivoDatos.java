@@ -15,34 +15,58 @@ public class ArchivoDatos {
     private ArrayList<Double> bradicardia;
 
     public ArchivoDatos(String rutaOUrl, boolean esUrl) throws Exception {
+
         tiempo = new ArrayList<>();
         normal = new ArrayList<>();
         taquicardia = new ArrayList<>();
         bradicardia = new ArrayList<>();
 
-        BufferedReader br;
+        try {
 
-        if (esUrl) {
-            URL url = new URL(rutaOUrl);
-            br = new BufferedReader(new InputStreamReader(url.openStream()));
-        } else {
-            File archivo = new File(rutaOUrl);
-            br = new BufferedReader(new FileReader(archivo));
+            BufferedReader br;
+
+            if (esUrl) {
+                URL url = new URL(rutaOUrl);
+                br = new BufferedReader(new InputStreamReader(url.openStream()));
+            } else {
+                File archivo = new File(rutaOUrl);
+                br = new BufferedReader(new FileReader(archivo));
+            }
+
+            br.readLine(); // Saltar encabezado
+
+            String line;
+
+            while ((line = br.readLine()) != null) {
+
+                if (line.trim().isEmpty()) continue;
+
+                // CSV DE 3 COLUMNAS: tiempo; valor; tipo
+                String[] datos = line.split(";");
+
+                if (datos.length < 3) {
+                    System.err.println("Línea inválida: - ArchivoDatos.java:48" + line);
+                    continue;
+                }
+
+                double t = Double.parseDouble(datos[0].trim());
+                double val = Double.parseDouble(datos[1].trim());
+                String tipo = datos[2].trim();
+
+                tiempo.add(t);
+
+                switch (tipo) {
+                    case "Normal" -> normal.add(val);
+                    case "Taquicardia" -> taquicardia.add(val);
+                    case "Bradicardia" -> bradicardia.add(val);
+                }
+            }
+
+            br.close();
+
+        } catch (Exception e) {
+            throw new Exception("Error cargando datos: " + e.getMessage());
         }
-
-        br.readLine();
-
-        String linea;
-        while ((linea = br.readLine()) != null) {
-            String[] p = linea.split(",");
-
-            tiempo.add(Double.parseDouble(p[0].trim()));
-            normal.add(Double.parseDouble(p[1].trim()));
-            taquicardia.add(Double.parseDouble(p[2].trim()));
-            bradicardia.add(Double.parseDouble(p[3].trim()));
-        }
-
-        br.close();
     }
 
     public ArrayList<Double> getTiempo() {
@@ -50,11 +74,11 @@ public class ArchivoDatos {
     }
 
     public ArrayList<Double> getColumna(String tipo) {
-        switch (tipo) {
-            case "Normal": return normal;
-            case "Taquicardia": return taquicardia;
-            case "Bradicardia": return bradicardia;
-        }
-        return null;
+        return switch (tipo) {
+            case "Normal" -> normal;
+            case "Taquicardia" -> taquicardia;
+            case "Bradicardia" -> bradicardia;
+            default -> null;
+        };
     }
 }

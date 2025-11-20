@@ -1,5 +1,5 @@
 DESCRIPCION DEL PROYECTO 
-1. Descripción del proyecto 
+1. DESCRIPCION DEL PROYECTO 
 El programa está compuesto por tres clases que trabajan juntas para cargar y graficar señales ECG desde un archivo CSV almacenado en Google Drive. La clase ArchivoDatos se encarga de leer el archivo, reconocer su estructura de columnas (tiempo, ritmo normal, taquicardia y bradicardia), separar los valores y almacenarlos en listas independientes que luego pueden ser consultadas según el tipo de arritmia. La clase Graficador utiliza estos datos para dibujar la señal correspondiente sobre una ventana gráfica, escalando los valores y trazando la curva en función del tiempo con ejes y etiquetas adecuadas. Finalmente, la clase Main coordina la ejecución del programa: carga los datos desde el enlace de Drive, muestra un menú interactivo para que el usuario seleccione qué ritmo cardíaco desea visualizar, y envía la solicitud a la clase graficadora para mostrar la señal elegida. En conjunto, el sistema permite visualizar de manera clara y diferenciada los tres patrones de frecuencia cardíaca basados en los datos del archivo.
 
 2. INSTRUCCIONES DE EJECUCIÓN

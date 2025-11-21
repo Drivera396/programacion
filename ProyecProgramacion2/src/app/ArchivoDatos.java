@@ -35,7 +35,7 @@ public class ArchivoDatos {
                 if (linea.trim().isEmpty())
                     continue;
 
-                // IMPORTANTE: tu archivo usa PUNTO Y COMA como separador ";"
+                // El archivo usa PUNTO Y COMA como separador ";"
                 String[] datos = linea.split(";");
 
                 // Conversión segura
@@ -87,3 +87,4 @@ public class ArchivoDatos {
         };
     }
 }
+
